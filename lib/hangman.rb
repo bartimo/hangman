@@ -1,3 +1,5 @@
+require 'pry-byebug'
+
 class Hangman
   attr_reader :word_array, :max_attempts
   attr_accessor :current_round, :game_array, :guessed_letters, :attempts, :game_over
@@ -53,12 +55,30 @@ class Hangman
   end
 
   def check_for_valid_guess(guess)
-    if @guessed_letters.include?(guess) 
+
+    if @guessed_letters.any?(" #{guess} ") 
        false 
     else
-      @guessed_letters[guess.ord - 65] = " #{guess} "
+      
        true
     end
+  end
+
+  def get_guess
+    guess = nil
+    loop do
+      puts "Enter your guess"
+      guess = gets.chomp.upcase
+      if guess.match?(/[A-Z]/) && guess.length == 1 && !@guessed_letters.any?(" #{guess} ") 
+        @guessed_letters[guess.ord - 65] = " #{guess} "
+        break
+      else 
+        puts ''
+        display_guessed_letters
+        puts "Invalid entry, try again.\n"
+      end
+    end 
+    guess
   end
 
   private
