@@ -15,7 +15,7 @@ class Hangman
     @max_length = max_length
     @word_source = './res/wordlist.txt'
     @word_array = determine_word
-    @game_array = Array.new(@word_array.length,' _ ')
+    @game_array = Array.new(@word_array.length, ' _ ')
     @guessed_letters = Array.new(26,' - ')
     @current_round = current_round
     @attempts = attempts
@@ -25,15 +25,6 @@ class Hangman
 
   def load_saved_game
     puts "load game here"
-  end
-
-  def determine_word
-    word_list = []
-    File.foreach(@word_source) do |line|
-      word_list.push(line.chomp) if line.chomp.length.between?(@min_length, @max_length)
-    end
-    @word_list_size = word_list.length.to_s
-    word_list.shuffle.first.split('')
   end
 
   def display_intro
@@ -46,23 +37,15 @@ class Hangman
   end
 
   def display_game_board
-    puts "[ #{@game_array.join(' _ ')} ]"
+    puts "[ #{@game_array.join('')} ]"
     puts ''
   end
 
   def display_guessed_letters
+    puts 'guessed letters:'
     puts "| #{@guessed_letters.join('')} |"
   end
 
-  def check_for_valid_guess(guess)
-
-    if @guessed_letters.any?(" #{guess} ") 
-       false 
-    else
-      
-       true
-    end
-  end
 
   def get_guess
     guess = nil
@@ -81,6 +64,17 @@ class Hangman
     guess
   end
 
+  def make_guess(guess)
+ 
+    if @word_array.index(guess)
+      @word_array.each_with_index do |value, index|
+        if value == guess
+          @game_array[index] = " #{guess} "
+        end
+      end
+    end
+  end
+
   private
 
   def determine_word
@@ -89,7 +83,7 @@ class Hangman
       word_list.push(line.chomp) if line.chomp.length.between?(@min_length, @max_length)
     end
     @word_list_size = word_list.length.to_s
-    word_list.shuffle.first.split('')
+    word_list.shuffle.first.upcase.split('')
   end
 
 end
