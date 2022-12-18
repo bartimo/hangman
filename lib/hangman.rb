@@ -37,15 +37,20 @@ class Hangman
   end
 
   def display_game_board
+    show_gallows(@attempts)
+    puts ''
     puts "[ #{@game_array.map{ |i| " #{i} "}.join('')} ]"
     puts ''
     puts ''
     display_guessed_letters
+    puts ''
   end
 
   def display_guessed_letters
-    puts 'guessed letters:'
-    puts "| #{@guessed_letters.join('')} |"
+    puts 'Guessed letters:'
+    puts ''
+    puts "| #{@guessed_letters[0..12].join('')} |"
+    puts "| #{@guessed_letters[13..26].join('')} |"
   end
 
 
@@ -59,7 +64,7 @@ class Hangman
         break
       else 
         puts ''
-        display_guessed_letters
+        display_game_board
         puts "Invalid entry, try again.\n"
       end
     end 
@@ -69,6 +74,73 @@ class Hangman
   def make_guess(guess)
     @word_array.index(guess) ? process_correct_guess(guess) : process_incorrect_guess
   end
+
+  def show_gallows(attempts)
+    puts ''
+    case attempts
+    when 0
+      puts '  +----+  '
+      puts '  |       '
+      puts '  |       '
+      puts '  |       '
+      puts '  |       '
+      puts '  |       '
+      puts 
+    when 1
+      puts '  +----+  '
+      puts '  |    O  '
+      puts '  |       '
+      puts '  |       '
+      puts '  |       '
+      puts '  |       '
+      puts 
+    when 2
+      puts '  +----+  '
+      puts '  |    O  '
+      puts '  |   /   '
+      puts '  |       '
+      puts '  |       '
+      puts '  |       '
+      puts 
+    when 3
+      puts '  +----+  '
+      puts '  |    O  '
+      puts '  |   / \ '
+      puts '  |       '
+      puts '  |       '
+      puts '  |       '
+      puts ' ==========='
+      puts ''
+    when 4
+      puts '  +----+  '
+      puts '  |    O  '
+      puts '  |   /|\ '
+      puts '  |    |  '
+      puts '  |       '
+      puts '  |       '
+      puts ' ==========='
+      puts ''
+    when 5
+      puts '  +----+  '
+      puts '  |    O  '
+      puts '  |   /|\ '
+      puts '  |    |  '
+      puts '  |   /   '
+      puts '  |       '
+      puts ' ==========='
+      puts ''
+    when 6
+      puts '  +----+  '
+      puts '  |    O  '
+      puts '  |   /|\ '
+      puts '  |    |  '
+      puts '  |   / \ '
+      puts '  |       '
+      puts ' ==========='
+      puts ''
+    end
+  end
+end
 
   private
 
@@ -85,8 +157,11 @@ class Hangman
     @attempts += 1
     if @attempts == @max_attempts
       @game_over = true
+      show_gallows(6)
       puts "\nYOU LOSE\n"
+      puts ''
     else
+      puts '' 
       puts "Incorrect. you have made #{@attempts} of #{@max_attempts} attempts"
     end
   end
@@ -99,10 +174,7 @@ class Hangman
     end
     if @word_array == @game_array
       puts "\nYOU WIN\n"
+      puts ''
       @game_over = true
     end
   end
-end
-
-
-

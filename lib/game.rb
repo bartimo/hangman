@@ -13,9 +13,6 @@ until game.game_over
   game.display_game_board
   guess = game.get_guess
   game.make_guess(guess)
-  #game.display_guessed_letters
-  
-
 end
   
 
