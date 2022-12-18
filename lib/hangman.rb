@@ -15,7 +15,7 @@ class Hangman
     @max_length = max_length
     @word_source = './res/wordlist.txt'
     @word_array = determine_word
-    @game_array = Array.new(@word_array.length, ' _ ')
+    @game_array = Array.new(@word_array.length, '_')
     @guessed_letters = Array.new(26,' - ')
     @current_round = current_round
     @attempts = attempts
@@ -37,8 +37,10 @@ class Hangman
   end
 
   def display_game_board
-    puts "[ #{@game_array.join('')} ]"
+    puts "[ #{@game_array.map{ |i| " #{i} "}.join('')} ]"
     puts ''
+    puts ''
+    display_guessed_letters
   end
 
   def display_guessed_letters
@@ -65,14 +67,7 @@ class Hangman
   end
 
   def make_guess(guess)
- 
-    if @word_array.index(guess)
-      @word_array.each_with_index do |value, index|
-        if value == guess
-          @game_array[index] = " #{guess} "
-        end
-      end
-    end
+    @word_array.index(guess) ? process_correct_guess(guess) : process_incorrect_guess
   end
 
   private
@@ -86,6 +81,27 @@ class Hangman
     word_list.shuffle.first.upcase.split('')
   end
 
+  def process_incorrect_guess
+    @attempts += 1
+    if @attempts == @max_attempts
+      @game_over = true
+      puts "\nYOU LOSE\n"
+    else
+      puts "Incorrect. you have made #{@attempts} of #{@max_attempts} attempts"
+    end
+  end
+
+  def process_correct_guess(guess)
+    @word_array.each_with_index do |value, index|
+      if value == guess
+        @game_array[index] = "#{guess}"
+      end
+    end
+    if @word_array == @game_array
+      puts "\nYOU WIN\n"
+      @game_over = true
+    end
+  end
 end
 
 
