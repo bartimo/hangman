@@ -23,6 +23,11 @@ class Hangman
     @game_over = false
   end
 
+  def save_game
+    puts 'Game saved.'
+    @game_over = true
+  end
+
   def load_saved_game
     puts "load game here"
   end
@@ -30,6 +35,7 @@ class Hangman
   def display_intro
     puts 'Welcome to Hangman!'
     puts "Type 'load' to continue your last game. Enter any other key to start a new game."
+    puts "enter 'save' at any time to save and exit the game"
     load_saved_game if response = gets.chomp
     puts ''
     puts "The word was randomly selected from one of #{@word_list_size} options between #{@min_length} and #{@max_length} in length."
@@ -44,6 +50,7 @@ class Hangman
     puts ''
     display_guessed_letters
     puts ''
+
   end
 
   def display_guessed_letters
@@ -59,6 +66,9 @@ class Hangman
     loop do
       puts "Enter your guess"
       guess = gets.chomp.upcase
+      if guess == 'SAVE'
+        break
+      end
       if guess.match?(/[A-Z]/) && guess.length == 1 && !@guessed_letters.any?(" #{guess} ") 
         @guessed_letters[guess.ord - 65] = " #{guess} "
         break
@@ -159,7 +169,7 @@ end
       @game_over = true
       show_gallows(6)
       puts "\nYOU LOSE\n"
-      puts ''
+      puts "The word was #{word_array.join('')}"
     else
       puts '' 
       puts "Incorrect. you have made #{@attempts} of #{@max_attempts} attempts"
